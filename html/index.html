@@ -6,7 +6,9 @@
 
 <body>
     <div id="image_container" style="margin: 10px; padding: 10px;">
-        <img id="image_rendezvous" src="/l.jpg" x-hash="3f9c83eb47b1f029b4d7c7b45408dabe395cca47">
+        <img src="/l.jpg" x-hash="3f9c83eb47b1f029b4d7c7b45408dabe395cca47" x-file-name="l.jpg">
+        <img src="/assets/asset1.png" x-hash="a0bbecfd7253469c6fd0010f763999cc7cccf205" x-file-name="assets/asset1.png">
+        <img src="/assets/asset2.png" x-hash="a0bbecfd7253469c6fd0010f763999cc7cccf205" x-file-name="assets/asset2.png">
     </div>
 
     <script type="module">
@@ -17,7 +19,8 @@
         });
 
         function loadImage() {
-            const hash = this.getAttribute("x-hash")
+            const img = this;
+            const hash = img.getAttribute("x-hash")
             const client = new WebTorrent()
 
             // sample image
@@ -71,25 +74,21 @@
                     console.log(`torrent noPeers: ${announceType}`)
                 })
 
+                const fileName = img.getAttribute("x-file-name")
 
-                // console.log(JSON.stringify({ torrentId, torrent }))
+                console.log(fileName, torrent.files)
+
                 const file = torrent.files.find(function (file) {
-                    return file.name.endsWith('.jpg')
+                    return file.path === fileName;
                 })
                 console.log(torrent, file)
 
-                // Display the file by adding it to the DOM.
-                // Supports video, audio, image files, and more!
-                // file.appendTo('#image_container')
                 file.getBlobURL(function (err, url) {
                     if (err) throw err
-                    const img = document.getElementById("image_rendezvous")
-                    // a.download = file.name
                     img.src = url
                     img.width = "100";
                     console.log(img, url, file)
                 })
-
             })
         }
     </script>
