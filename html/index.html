@@ -21,6 +21,7 @@
         function loadImage() {
             const img = this;
             const hash = img.getAttribute("x-hash")
+            const fileName = img.getAttribute("x-file-name")
             const client = new WebTorrent()
 
             // sample image
@@ -35,8 +36,18 @@
             console.log(torrentId, client)
 
             client.add(torrentId, function (torrent) {
-                console.log("client.add", torrent)
-                window.torrent = torrent;
+
+                // if torrent has multiple files, choose which one to download
+                if (false && torrent.files.length > 1) {
+                    const file = torrent.files.find(function (file) {
+                        return file.path === fileName;
+                    })
+                    torrent.files.forEach(file => file.deselect());
+                    torrent.deselect(0, torrent.pieces.length - 1, false);
+                    if (file) {
+                        torrent.select(file._startPiece, file._endPiece, false);
+                    }
+                }
 
                 torrent.on('infoHash', function () {
                     console.log('torrent infoHash')
@@ -73,8 +84,6 @@
                 torrent.on('noPeers', function (announceType) {
                     console.log(`torrent noPeers: ${announceType}`)
                 })
-
-                const fileName = img.getAttribute("x-file-name")
 
                 console.log(fileName, torrent.files)
 
