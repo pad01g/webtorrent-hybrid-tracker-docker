@@ -1,6 +1,6 @@
 # what is this?
 
-docker containers with tracker and seeder using host network
+docker containers with tracker and seeder using host network. it mainly uses https://github.com/webtorrent/webtorrent 
 
 # dependency
 
