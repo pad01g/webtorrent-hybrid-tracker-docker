@@ -2,11 +2,9 @@
 
 docker containers with tracker and seeder using host network
 
-# install
+# dependency
 
-```
-docker compose build
-```
+- docker
 
 # run 
 
