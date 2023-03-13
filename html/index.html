@@ -6,7 +6,7 @@
 
 <body>
     <div id="image_container" style="margin: 10px; padding: 10px;">
-        <img id="image_rendezvous" src="/l.jpg">
+        <img id="image_rendezvous" src="/l.jpg" x-hash="3f9c83eb47b1f029b4d7c7b45408dabe395cca47">
     </div>
 
     <script type="module">
@@ -17,10 +17,13 @@
         });
 
         function loadImage() {
+            const hash = this.getAttribute("x-hash")
             const client = new WebTorrent()
 
             // sample image
-            const torrentId = 'magnet:?xt=urn:btih:3f9c83eb47b1f029b4d7c7b45408dabe395cca47&dn=l.jpg&tr=http%3A%2F%2F127.0.0.1:8000%2Fannounce&tr=udp%3A%2F%2F127.0.0.1:8000&tr=ws%3A%2F%2F127.0.0.1:8000'
+            const trackerList = ["", "http://127.0.0.1:8000/announce", "udp://127.0.0.1:8000", "ws://127.0.0.1:8000"]
+            const trackerListStr = trackerList.map(tracker => encodeURIComponent(tracker)).join("&tr=")
+            const torrentId = `magnet:?xt=urn:btih:${hash}${trackerListStr}`
 
             client.on('error', function (err) {
                 console.error('ERROR: ' + err.message)
@@ -42,10 +45,10 @@
                     console.log('torrent is ready: ')
                 })
                 torrent.on('download', function (bytes) {
-                    console.log('just downloaded: ' + bytes)
-                    console.log('total downloaded: ' + torrent.downloaded)
-                    console.log('download speed: ' + torrent.downloadSpeed)
-                    console.log('progress: ' + torrent.progress)
+                    // console.log('just downloaded: ' + bytes)
+                    // console.log('total downloaded: ' + torrent.downloaded)
+                    // console.log('download speed: ' + torrent.downloadSpeed)
+                    // console.log('progress: ' + torrent.progress)
                 })
                 torrent.on('metadata', function () {
                     console.log('torrent metadata is determined: ')
@@ -58,10 +61,10 @@
                 })
 
                 torrent.on('upload', function (bytes) {
-                    console.log('just uploaded: ' + bytes)
-                    console.log('total uploaded: ' + torrent.uploaded)
-                    console.log('upload speed: ' + torrent.uploadSpeed)
-                    console.log('progress: ' + torrent.progress)
+                    // console.log('just uploaded: ' + bytes)
+                    // console.log('total uploaded: ' + torrent.uploaded)
+                    // console.log('upload speed: ' + torrent.uploadSpeed)
+                    // console.log('progress: ' + torrent.progress)
                 })
 
                 torrent.on('noPeers', function (announceType) {
