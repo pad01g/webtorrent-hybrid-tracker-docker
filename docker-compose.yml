@@ -5,9 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile.tracker
     network_mode: "host"
-    # ports:
-    #   - "18000:8000/udp"
-    #   - "18000:8000/tcp"
 
   seeder:
     build:
